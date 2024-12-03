@@ -1,0 +1,12 @@
+# Ignorer le dossier node_modules
+node_modules/
+
+# Ignorer le dossier gateway
+gateway/
+
+# Ignorer le fichier .env
+.env
+
+
+package.json
+package-lock.json
