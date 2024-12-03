@@ -6,7 +6,3 @@ gateway/
 
 # Ignorer le fichier .env
 .env
-
-
-package.json
-package-lock.json
