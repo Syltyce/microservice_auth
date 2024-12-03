@@ -7,21 +7,20 @@ const register = async (req, res) => {
         const { email, password } = req.body;
         // console.log('Inscription reçu :', email, password);
 
-
-        // Vérifier si l'utilisateur existe déjà
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ message: 'Email existe déjà' });
-        }
-
         // Créer un nouvel utilisateur
         const user = new User({ email, password });
         await user.save();
-        // console.log('Utilisateur créé:', user);
+        console.log('Utilisateur créé:', user);
 
         res.status(201).json({ message: 'Utilisateur enregistré avec succès' });
     } catch (error) {
         // console.error('Erreur Inscription :', error);
+
+        // Vérifier si l'erreur est liée à l'unicité de l'email
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({ message: error.message });
+        }
+
         res.status(500).json({ error: 'Erreur Serveur' });
     }
 };
@@ -39,16 +38,12 @@ const login = async (req, res) => {
             return res.status(404).json({ message: 'Utilisateur pas trouvé' });
         }
 
-        // Vérifier le mot de passe BRUT
-        if (user.password !== password) {
-            return res.status(401).json({ message: 'Mot de passe incorrect' });
-        }
 
         // Vérifier le mot de passe HASH
-        // const isPasswordValid = await user.comparePassword(password);
-        // if (!isPasswordValid) {
-        //     return res.status(401).json({ message: 'Mot de passe incorrect' });
-        // }
+        const isPasswordValid = await user.comparePassword(password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: 'Mot de passe incorrect' });
+        }
 
         // Générer un token JWT
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
