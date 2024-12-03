@@ -1,8 +1,8 @@
 # Ignorer le dossier node_modules
 node_modules/
 
-# Ignorer le dossier gateway
-gateway/
+# Ignorer le dossier node_module du gateway
+gateway/node_modules
 
 # Ignorer le fichier .env
 .env
