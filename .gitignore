@@ -1,8 +1,8 @@
 # Ignorer le dossier node_modules
-node_modules/
+microservice/node_modules/
 
 # Ignorer le dossier node_module du gateway
-gateway/node_modules
+gateway/node_modules/
 
 # Ignorer le fichier .env
-.env
+microservice/.env
