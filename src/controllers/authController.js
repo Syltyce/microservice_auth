@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const register = async (req, res) => {
     try {
         const { email, password } = req.body;
-        console.log('Received registration request:', email, password);
+        // console.log('Inscription reçu :', email, password);
 
 
         // Vérifier si l'utilisateur existe déjà
@@ -17,11 +17,11 @@ const register = async (req, res) => {
         // Créer un nouvel utilisateur
         const user = new User({ email, password });
         await user.save();
-        console.log('User created:', user);
+        // console.log('Utilisateur créé:', user);
 
         res.status(201).json({ message: 'Utilisateur enregistré avec succès' });
     } catch (error) {
-        console.error('Error during registration:', error);
+        // console.error('Erreur Inscription :', error);
         res.status(500).json({ error: 'Erreur Serveur' });
     }
 };
@@ -30,6 +30,8 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
+        console.log('Received login request:', email, password);
+
 
         // Vérifier si l'utilisateur existe
         const user = await User.findOne({ email });
@@ -37,17 +39,23 @@ const login = async (req, res) => {
             return res.status(404).json({ message: 'Utilisateur pas trouvé' });
         }
 
-        // Vérifier le mot de passe
-        const isPasswordValid = await user.comparePassword(password);
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Invalid mot de passe' });
+        // Vérifier le mot de passe BRUT
+        if (user.password !== password) {
+            return res.status(401).json({ message: 'Mot de passe incorrect' });
         }
+
+        // Vérifier le mot de passe HASH
+        // const isPasswordValid = await user.comparePassword(password);
+        // if (!isPasswordValid) {
+        //     return res.status(401).json({ message: 'Mot de passe incorrect' });
+        // }
 
         // Générer un token JWT
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         res.status(200).json({ token });
     } catch (error) {
+        console.error('Error during login:', error);
         res.status(500).json({ error: 'Erreur Serveur' });
     }
 };
