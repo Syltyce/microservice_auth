@@ -14,6 +14,6 @@ mongoose.connect(process.env.MONGO_URI)
     .catch((err) => console.error(err));
 
 // Routes
-app.use('/auth', authRoutes);
+app.use('/', authRoutes);
 
 module.exports = app;
