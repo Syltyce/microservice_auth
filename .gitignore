@@ -6,3 +6,4 @@ gateway/node_modules/
 
 # Ignorer le fichier .env
 microservice/.env
+.env

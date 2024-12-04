@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Démarrer le microservice
-CMD ["npm", "start"]
+CMD ["npx", "nodemon", "start"]

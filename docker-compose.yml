@@ -1,15 +1,17 @@
 services:
-  microservice:
+  microservice_auth:
     build:
       context: ./microservice
       dockerfile: Dockerfile
     # networks:
     #   - my-network
     environment:
-      - NODE_ENV=${NODE_ENV}
-      - MONGO_URI=${MONGO_URI}
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://mongo_auth:27017/authdb
+      - JWT_SECRET=your_jwt_secret
     depends_on:
-      - mongo
+      - mongo_auth
+    command: ["npm", "run", "dev"]
 
   api-gateway:
     build:
@@ -18,13 +20,14 @@ services:
     ports:
       - "4000:4000"
     environment:
-      - NODE_ENV=${NODE_ENV}
+      - NODE_ENV=production
     # networks:
     #   - my-network
     depends_on:
-      - microservice
+      - microservice_auth
 
-  mongo:
+  mongo_auth:
+    container_name: mongo_auth 
     image: mongo:latest
     ports:
       - "27017:27017"
@@ -33,6 +36,8 @@ services:
     # networks:
     #   - my-network
 
+volumes:
+  mongo-data:
 # networks:
 #   my-network:
 #     driver: bridge
