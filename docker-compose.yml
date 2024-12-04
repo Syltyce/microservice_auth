@@ -3,13 +3,11 @@ services:
     build:
       context: ./microservice
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    networks:
-      - my-network
+    # networks:
+    #   - my-network
     environment:
-      - NODE_ENV=production
-      - MONGO_URI=mongodb://mongo:27017/microservice-db
+      - NODE_ENV=${NODE_ENV}
+      - MONGO_URI=${MONGO_URI}
     depends_on:
       - mongo
 
@@ -19,8 +17,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4000:4000"
-    networks:
-      - my-network
+    environment:
+      - NODE_ENV=${NODE_ENV}
+    # networks:
+    #   - my-network
     depends_on:
       - microservice
 
@@ -28,9 +28,11 @@ services:
     image: mongo:latest
     ports:
       - "27017:27017"
-    networks:
-      - my-network
+    volumes:
+      - mongo-data:/data/db
+    # networks:
+    #   - my-network
 
-networks:
-  my-network:
-    driver: bridge
+# networks:
+#   my-network:
+#     driver: bridge

@@ -1,5 +1,5 @@
 # Utiliser une image de base Node.js
-FROM node:18-alpine
+FROM node:20.13.1-alpine
 
 # Définir le répertoire de travail dans le conteneur
 WORKDIR /gateway
